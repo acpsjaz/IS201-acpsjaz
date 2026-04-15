@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jokes Galore</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* Themed link button for Hobbies Page */
+    .nav-link {
+      display: inline-block;
+      padding: 10px 22px;
+      background: var(--teal);
+      color: white;
+      font-weight: 700;
+      border-radius: 999px;
+      text-decoration: none;
+      font-family: 'Nunito', sans-serif;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.3s ease;
+      margin-bottom: 25px;
+    }
+
+    .nav-link:hover {
+      background: var(--purple);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    }
+
+    :root {
+      --purple: #7C6CF6;
+      --pink: #FF8FB1;
+      --yellow: #FFD166;
+      --teal: #4ECDC4;
+      --bg: linear-gradient(135deg, #FDEBFF, #E0F7FA, #FFF5D6);
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg);
+      background-size: 400% 400%;
+      animation: gradientMove 10s ease infinite;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    h1 {
+      font-family: 'Fredoka One', cursive;
+      color: #3C3489;
+      margin-bottom: 10px;
+      font-size: 2.8rem;
+    }
+
+    p {
+      color: #555;
+      margin-bottom: 30px;
+      font-weight: 600;
+    }
+
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      border: 4px solid transparent;
+      background-image: linear-gradient(white, white), 
+                        linear-gradient(135deg, var(--purple), var(--pink), var(--yellow), var(--teal));
+      background-origin: border-box;
+      background-clip: padding-box, border-box;
+    }
+
+    .setup {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .punchline {
+      font-size: 18px;
+      color: #7C6CF6;
+      display: none;
+    }
+
+    button {
+      padding: 12px 22px;
+      border: none;
+      border-radius: 999px;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 5px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    }
+
+    .reveal {
+      background: var(--purple);
+      color: white;
+    }
+
+    .next {
+      background: var(--yellow);
+      color: #7A4E00;
+    }
+
+    .count {
+      font-size: 26px;
+      font-family: 'Fredoka One', cursive;
+      color: #3C3489;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <a href="fromScratch.html" class="nav-link">Hobbies Page</a>
+  </div>
+  <h1>Jokes Galore</h1>
+  <p>get ready to GIGGLE</p>
+
+  <div class="card">
+    <div class="setup" id="setup">Click "New Joke" to begin...</div>
+    <div class="punchline" id="punchline"></div>
+  </div>
+
+  <div>
+    <button class="reveal" onclick="revealPunchline()" id="revealBtn" style="display:none">Reveal Punchline</button>
+    <button class="next" onclick="getJoke()">New Joke</button>
+  </div>
+
+  <div style="margin-top:20px; text-align:center;">
+    <div>Laughs Had</div>
+    <div class="count" id="count">0</div>
+  </div>
+
+  <script>
+    let jokeCount = 0;
+
+    async function getJoke() {
+      const setup = document.getElementById('setup');
+      const punchline = document.getElementById('punchline');
+      const revealBtn = document.getElementById('revealBtn');
+
+      setup.textContent = 'Loading...';
+      punchline.style.display = 'none';
+      revealBtn.style.display = 'none';
+
+      try {
+        const res = await fetch('https://official-joke-api.appspot.com/jokes/random');
+        const data = await res.json();
+
+        setup.textContent = data.setup;
+        punchline.textContent = data.punchline;
+
+        revealBtn.style.display = 'inline-block';
+
+        jokeCount++;
+        document.getElementById('count').textContent = jokeCount;
+
+      } catch (err) {
+        setup.textContent = 'Something went wrong...';
+        punchline.textContent = 'Try again!';
+        revealBtn.style.display = 'inline-block';
+      }
+    }
+
+    function revealPunchline() {
+      document.getElementById('punchline').style.display = 'block';
+      document.getElementById('revealBtn').style.display = 'none';
+    }
+  </script>
+
+</body>
+</html>
